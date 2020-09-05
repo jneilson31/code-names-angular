@@ -1,0 +1,40 @@
+:host {
+  .card {
+    background-color: rgb(243, 228, 209);
+    padding: 16px;
+    width: calc(20% - 16px);
+    margin: 16px 8px;
+    .inside-card {
+      border: 3px solid rgb(216, 196, 171);
+      border-radius: 4px;
+      padding: 8px;
+      .word-box {
+        background-color: white;
+        border-radius: 4px;
+        padding: 8px;
+        display: flex;
+        justify-content: center;
+        color: rgb(107, 107, 107);
+      }
+    }
+  }
+
+  .red-card {
+    background: #cb2d3e;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, #ef473a, #cb2d3e);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #ef473a, #cb2d3e); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  }
+
+  .blue-card {
+    background: #56CCF2;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to top, #2F80ED, #56CCF2);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to top, #2F80ED, #56CCF2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  }
+
+  .black-card {
+    background: #232526;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, #414345, #232526);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #414345, #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    color: white;
+  }
+}
