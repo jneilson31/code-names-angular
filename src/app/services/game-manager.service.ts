@@ -12,19 +12,39 @@ export class GameManagerService {
 
   constructor(readonly cardsService: CardsService) { }
 
-  // public randomizeWhatColorGoesFirst(): void {
-  //   const randomNumber = Math.floor(Math.random() * 100);
-  //   if (randomNumber % 2) {
-  //     this.colorOfFirstTurnSubject.next('red');
-  //     this.cardsService.updatePlayerCards('red');
-  //     this.redAgentCardsSubject.next(this.redAgentCardsSubject.getValue() + 1);
-  //     console.log('Red first', this.redAgentCardsSubject.getValue());
-  //     console.log('Blue', this.blueAgentCardsSubject.getValue());
-  //   } else {
-  //     this.colorOfFirstTurnSubject.next('blue');
-  //     this.blueAgentCardsSubject.next(this.blueAgentCardsSubject.getValue() + 1);
-  //     console.log('Blue first', this.blueAgentCardsSubject.getValue());
-  //     console.log('Red', this.redAgentCardsSubject.getValue());
+  // Determine Whose turn
+  // Assign Cards their roles (red, blue, assasin, civilians)
+  // Set display for remaining cards
+  // Possible timer
+
+  public setupInitialGame(): void {
+    this.assignTeamThatGoesFirst();
+    // this.startCountdown(5);
+  }
+
+  private assignTeamThatGoesFirst(): void {
+    const randomNumber = Math.floor(Math.random() * 100);
+    if (randomNumber % 2) {
+      this.colorOfFirstTurnSubject.next('red');
+      this.cardsService.updateNumberOfRedCards();
+
+    } else {
+      this.colorOfFirstTurnSubject.next('blue');
+      this.cardsService.updateNumberOfBlueCards();
+
+    }
+  }
+
+  // private startCountdown(seconds): void {
+  //   let counter = seconds;
+  //   const interval = setInterval(() => {
+  //   console.log(counter);
+  //   counter--;
+  //   if (counter === 0) {
+  //     clearInterval(interval);
+  //     console.log("I'm done!");
+  //     return;
   //   }
+  //   }, 1000);
   // }
 }

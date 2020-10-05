@@ -1,14 +1,16 @@
-
-<div class="container-fluid">
-  <div class="row">
-    <div class="col">
-      <h4 class="text-center">Team 1 Score</h4>
-    </div>
-    <div class="col-6">
-      <app-cards></app-cards>
-    </div>
-    <div class="col">
-      <h4 class="text-center">Team 2 Score</h4>
+<div *ngIf="gameBoardVm$ | async as vm">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <h4 class="text-center">Red Team Cards: {{vm.redTeamCardsRemaining}} </h4>
+      </div>
+      <div class="col-6">
+        <app-cards></app-cards>
+      </div>
+      <div class="col">
+        <h4 class="text-center">Blue Team Cards: {{vm.blueTeamCardsRemaining}}</h4>
+      </div>
     </div>
   </div>
+  <div class="turn-indicator text-center" [ngClass]="vm.whoseTurn === 'red' ? 'red-team-turn' : 'blue-team-turn'">{{vm.whoseTurn | titlecase}} team, it's your turn!</div>
 </div>

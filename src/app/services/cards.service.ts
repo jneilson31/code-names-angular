@@ -25,26 +25,8 @@ export class CardsService {
   public blueAgentCards$: Observable<number> = this.blueAgentCardsSubject.asObservable();
   private assassinsCardsSubject: BehaviorSubject<number> = new BehaviorSubject(1);
   public assassinCards$: Observable<number> = this.assassinsCardsSubject.asObservable();
-  // private numberOfBystandersSubject: BehaviorSubject<number> = new BehaviorSubject(7);
-  // public numberOfBystanders$: Observable<number> = this.numberOfBystandersSubject.asObservable();
-
-  // private colorOfFirstTurnSubject: BehaviorSubject<string> = new BehaviorSubject(null);
-  // public colorOfFirstTurn$: Observable<string> = this.colorOfFirstTurnSubject.asObservable();
-
-  // private numberOfDoubleAgentsSubject: BehaviorSubject<number> = new BehaviorSubject(1);
-  // public numberOfDoubleAgents$: Observable<number> = this.numberOfDoubleAgentsSubject.asObservable();
-
-  // private wordPool$: Observable<string[]> = of([
-  //   'turkey', 'revolution', 'shot', 'bond', 'fair',
-  //    'gas', 'tooth', 'bar', 'game', 'pit',
-  //    'cricket', 'apple', 'hollywood', 'hook', 'sword',
-  //    'dinosaur', 'bat', 'amazon', 'park', 'pin',
-  //     'pitch', 'bear', 'staff', 'oil', 'life',
-  //     'queen', 'king', 'soap', 'cheat', 'banana', 'plant', 'mouse',
-  //     'keyboard', 'phone', 'cells', 'blood', 'pills', 'frame', 'skirt',
-  //     'tissue', 'boxes', 'headphones', 'speaker', 'president', 'backpack',
-  //     'ruler', 'towel', 'journey', 'pirate', 'ninja', 'treasure', 'magnet', 'time'
-  // ]);
+  private colorOfFirstTurnSubject: BehaviorSubject<string> = new BehaviorSubject(null);
+  public colorOfFirstTurn$: Observable<string> = this.colorOfFirstTurnSubject.asObservable();
 
   private wordPool$: Observable<CodeNamesCard[]> = of([
     { word: 'turkey', value: CardValues.Bystander }, { word: 'king', value: CardValues.Bystander },
@@ -120,23 +102,11 @@ export class CardsService {
     return cards;
   }
 
-  // public updatePlayerCards(colorToUpdate: string): void {
-  //   colorToUpdate === 'red' ? this.redAgentCardsSubject.next(this.re)
-  //   this.red
-  // }
+  public updateNumberOfRedCards(): any {
+    this.redAgentCardsSubject.next(this.redAgentCardsSubject.getValue() + 1);
+  }
 
-  // public randomizeWhatColorGoesFirst(): void {
-  //   const randomNumber = Math.floor(Math.random() * 100);
-  //   if (randomNumber % 2) {
-  //     this.colorOfFirstTurnSubject.next('red');
-  //     this.redAgentCardsSubject.next(this.redAgentCardsSubject.getValue() + 1);
-  //     console.log('Red first', this.redAgentCardsSubject.getValue());
-  //     console.log('Blue', this.blueAgentCardsSubject.getValue());
-  //   } else {
-  //     this.colorOfFirstTurnSubject.next('blue');
-  //     this.blueAgentCardsSubject.next(this.blueAgentCardsSubject.getValue() + 1);
-  //     console.log('Blue first', this.blueAgentCardsSubject.getValue());
-  //     console.log('Red', this.redAgentCardsSubject.getValue());
-  //   }
-  // }
+  public updateNumberOfBlueCards(): any {
+    this.blueAgentCardsSubject.next(this.blueAgentCardsSubject.getValue() + 1);
+  }
 }

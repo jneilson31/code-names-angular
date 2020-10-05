@@ -1,4 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { CardsService } from '../services/cards.service';
+import { GameManagerService } from '../services/game-manager.service';
+
+export interface GameBoardVm {
+  whoseTurn: string;
+  redTeamCardsRemaining: number;
+  blueTeamCardsRemaining: number;
+
+}
 
 @Component({
   selector: 'app-board',
@@ -7,9 +18,50 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BoardComponent implements OnInit {
 
-  constructor() { }
+  colorOfTeamToGoFirst$ = this.gameManager.colorOfFirstTurn$;
+  redTeamCardsRemaining$ = this.cardsService.redAgentCards$;
+  blueTeamCardsRemaining$ = this.cardsService.blueAgentCards$;
+  gameBoardVm$: Observable<GameBoardVm>;
+
+  constructor(
+    private readonly gameManager: GameManagerService,
+    private readonly cardsService: CardsService
+    ) { }
 
   ngOnInit(): void {
+    this.gameBoardVm$ = combineLatest([
+      this.gameManager.colorOfFirstTurn$,
+      this.cardsService.redAgentCards$,
+      this.cardsService.blueAgentCards$
+    ]).pipe(
+      map(([
+        colorOfFirstTurn,
+        redAgentCards,
+        blueAgentCards
+      ]) => {
+        return {
+          whoseTurn: colorOfFirstTurn,
+          redTeamCardsRemaining: redAgentCards,
+          blueTeamCardsRemaining: blueAgentCards,
+        };
+      })
+    );
+
+    // public vm$: Observable<IAquasoftOrderOptionsViewModel> = combineLatest(
+    //   this.orderTypeSubject,
+    //   this.dataSubject,
+    // ).pipe(
+    //   map(([orderType, data]) => {
+    //     return {
+    //       hasReceivedTrial: data && data.hasReceivedTrial,
+    //       orderType: orderType,
+    //       percentDiscount: data ? data.percentDiscount : 0,
+    //       disableLearnMore: data ? data.disableLearnMore : true,
+    //       isReady: !!data,
+    //     };
+    //   }),
+    // );
+    this.gameManager.setupInitialGame();
   }
 
 }
