@@ -9,7 +9,10 @@ export interface GameBoardVm {
   whoseTurn: string;
   redTeamCardsRemaining: number;
   blueTeamCardsRemaining: number;
-  playClock: any;
+  gameTimer: {
+    minutes: number;
+    seconds: number;
+  };
 
 }
 
@@ -36,38 +39,23 @@ export class BoardComponent implements OnInit {
       this.gameManager.colorOfFirstTurn$,
       this.cardsService.redAgentCards$,
       this.cardsService.blueAgentCards$,
-      // this.timerService.playClockWithMinutesAndSeconds$,
-      this.timerService.playClock$,
+      this.timerService.playClockWithMinutesAndSeconds$,
     ]).pipe(
       map(([
         colorOfFirstTurn,
         redAgentCards,
         blueAgentCards,
-        playClock
+        gameTimer
       ]) => {
         return {
           whoseTurn: colorOfFirstTurn,
           redTeamCardsRemaining: redAgentCards,
           blueTeamCardsRemaining: blueAgentCards,
-          playClock
+          gameTimer
         };
       })
     );
 
-    // public vm$: Observable<IAquasoftOrderOptionsViewModel> = combineLatest(
-    //   this.orderTypeSubject,
-    //   this.dataSubject,
-    // ).pipe(
-    //   map(([orderType, data]) => {
-    //     return {
-    //       hasReceivedTrial: data && data.hasReceivedTrial,
-    //       orderType: orderType,
-    //       percentDiscount: data ? data.percentDiscount : 0,
-    //       disableLearnMore: data ? data.disableLearnMore : true,
-    //       isReady: !!data,
-    //     };
-    //   }),
-    // );
     this.gameManager.setupInitialGame();
   }
 

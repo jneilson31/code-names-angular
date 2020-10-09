@@ -13,7 +13,7 @@
     </div>
   </div>
   <div class="turn-indicator text-center" [ngClass]="vm.whoseTurn === 'red' ? 'red-team-turn' : 'blue-team-turn'">{{vm.whoseTurn | titlecase}} team, it's your turn!</div>
-  <h1 class="text-center">Time Remaining: {{vm.playClock}} </h1>
+  <h1 class="text-center">Time Remaining: <span class="game-clock-numbers">{{vm.gameTimer.minutes}}</span>:<span class="game-clock-numbers">{{vm.gameTimer.seconds}}</span></h1>
 </div>
 
 

@@ -8,32 +8,15 @@ import { map, takeWhile, tap } from 'rxjs/operators';
 export class TimerService {
   private timeLimit$: BehaviorSubject<number> = new BehaviorSubject(90);
   private minutes$: BehaviorSubject<number> = new BehaviorSubject(1);
-  private seconds$: BehaviorSubject<number> = new BehaviorSubject(5);
-  private timerForTimeRemaining$: Observable<any> = timer(0, 1000);
-  private timerForMinutes$: Observable<number> = timer(0, 1000);
+  private seconds$: BehaviorSubject<number> = new BehaviorSubject(60);
+  private timerForMinutes$: Observable<number> = timer(0, 60000);
   private timerForSeconds$: Observable<number> = timer(0, 1000);
-
-  public playClock$ = combineLatest([
-    this.timeLimit$,
-    this.timerForTimeRemaining$
-  ]).pipe(
-    map(([timeLimit, countdownTimer]) => {
-      return {
-        timeLimit,
-        countdownTimer
-      };
-    }),
-    map(x => (x.timeLimit - x.countdownTimer - 1)),
-    takeWhile(timeRemaining => timeRemaining > 0),
-    tap(data => console.log(`data`, data))
-  );
 
   public playClockWithMinutesAndSeconds$ = combineLatest([
     this.minutes$,
     this.seconds$,
     this.timerForMinutes$,
     this.timerForSeconds$,
-
   ]).pipe(
     map(([minutes, seconds, minutesTimer, secondsTimer]) => {
       return {
@@ -43,9 +26,12 @@ export class TimerService {
         secondsTimer
       };
     }),
-    tap(data => console.log(`data from combineLatest`, data)),
-    map(x => x.minutes),
-    // takeWhile(timeRemaining => timeRemaining > 0),
+    map(x => {
+      x.seconds = x.seconds - x.secondsTimer - 1;
+      x.minutes = x.minutes - x.minutesTimer - 1;
+      return x;
+    }),
+    takeWhile(x => x.seconds >= 0),
     tap(data => console.log(`data`, data))
   );
 
