@@ -4,7 +4,7 @@
       <div class="col">
         <h4 class="text-center">Red Team Cards: {{vm.redTeamCardsRemaining}} </h4>
       </div>
-      <div class="col-6">
+      <div class="col-6 text-center">
         <app-cards></app-cards>
       </div>
       <div class="col">
@@ -13,4 +13,7 @@
     </div>
   </div>
   <div class="turn-indicator text-center" [ngClass]="vm.whoseTurn === 'red' ? 'red-team-turn' : 'blue-team-turn'">{{vm.whoseTurn | titlecase}} team, it's your turn!</div>
+  <h1 class="text-center">Time Remaining: {{vm.playClock}} </h1>
 </div>
+
+

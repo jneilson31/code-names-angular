@@ -3,11 +3,13 @@ import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CardsService } from '../services/cards.service';
 import { GameManagerService } from '../services/game-manager.service';
+import { TimerService } from '../services/timer.service';
 
 export interface GameBoardVm {
   whoseTurn: string;
   redTeamCardsRemaining: number;
   blueTeamCardsRemaining: number;
+  playClock: any;
 
 }
 
@@ -25,24 +27,29 @@ export class BoardComponent implements OnInit {
 
   constructor(
     private readonly gameManager: GameManagerService,
-    private readonly cardsService: CardsService
+    private readonly cardsService: CardsService,
+    private readonly timerService: TimerService
     ) { }
 
   ngOnInit(): void {
     this.gameBoardVm$ = combineLatest([
       this.gameManager.colorOfFirstTurn$,
       this.cardsService.redAgentCards$,
-      this.cardsService.blueAgentCards$
+      this.cardsService.blueAgentCards$,
+      // this.timerService.playClockWithMinutesAndSeconds$,
+      this.timerService.playClock$,
     ]).pipe(
       map(([
         colorOfFirstTurn,
         redAgentCards,
-        blueAgentCards
+        blueAgentCards,
+        playClock
       ]) => {
         return {
           whoseTurn: colorOfFirstTurn,
           redTeamCardsRemaining: redAgentCards,
           blueTeamCardsRemaining: blueAgentCards,
+          playClock
         };
       })
     );

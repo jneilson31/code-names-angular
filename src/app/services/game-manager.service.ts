@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CardsService } from './cards.service';
+import { TimerService } from './timer.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,16 +11,15 @@ export class GameManagerService {
   private colorOfFirstTurnSubject: BehaviorSubject<string> = new BehaviorSubject(null);
   public colorOfFirstTurn$: Observable<string> = this.colorOfFirstTurnSubject.asObservable();
 
-  constructor(readonly cardsService: CardsService) { }
+  constructor(readonly cardsService: CardsService, readonly timerService: TimerService) { }
 
   // Determine Whose turn
-  // Assign Cards their roles (red, blue, assasin, civilians)
+  // Assign Cards their roles (red, blue, assassin, civilians)
   // Set display for remaining cards
   // Possible timer
 
   public setupInitialGame(): void {
     this.assignTeamThatGoesFirst();
-    // this.startCountdown(5);
   }
 
   private assignTeamThatGoesFirst(): void {
