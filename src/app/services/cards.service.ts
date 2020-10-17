@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, BehaviorSubject, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { GameManagerService } from './game-manager.service';
 
 export enum CardValues {
   RedAgent = 'Red Agent',
@@ -56,17 +57,7 @@ export class CardsService {
     { word: 'queen', value: CardValues.Bystander }, { word: 'time', value: CardValues.Bystander },
   ]);
 
-  public cardsInPlay$ = combineLatest([
-    this.numberOfCardsInPlay$,
-    this.wordPool$,
-    ]).pipe(
-      map(([numberOfCardsInPlay, wordPool]) => {
-        this.shuffleDeck(wordPool);
-        return wordPool.slice(0, numberOfCardsInPlay);
-      }),
-  );
-
-  public assignCardValuesAndCardDeck$ = combineLatest([
+  public cardValuesAndCardDeck$ = combineLatest([
     this.numberOfCardsInPlay$,
     this.wordPool$,
     this.redAgentCards$,
@@ -89,6 +80,8 @@ export class CardsService {
         return this.shuffleDeck(cardDeck);
       }),
   );
+
+
 
   constructor() { }
 

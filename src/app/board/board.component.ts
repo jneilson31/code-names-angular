@@ -9,10 +9,7 @@ export interface GameBoardVm {
   whoseTurn: string;
   redTeamCardsRemaining: number;
   blueTeamCardsRemaining: number;
-  gameTimer: {
-    minutes: number;
-    seconds: number;
-  };
+  gameTimer: number;
 
 }
 
@@ -22,8 +19,6 @@ export interface GameBoardVm {
   styleUrls: ['./board.component.scss']
 })
 export class BoardComponent implements OnInit {
-
-  colorOfTeamToGoFirst$ = this.gameManager.colorOfFirstTurn$;
   redTeamCardsRemaining$ = this.cardsService.redAgentCards$;
   blueTeamCardsRemaining$ = this.cardsService.blueAgentCards$;
   gameBoardVm$: Observable<GameBoardVm>;
@@ -36,10 +31,10 @@ export class BoardComponent implements OnInit {
 
   ngOnInit(): void {
     this.gameBoardVm$ = combineLatest([
-      this.gameManager.colorOfFirstTurn$,
+      this.gameManager.whoseTurn$,
       this.cardsService.redAgentCards$,
       this.cardsService.blueAgentCards$,
-      this.timerService.playClockWithMinutesAndSeconds$,
+      this.timerService.timer$,
     ]).pipe(
       map(([
         colorOfFirstTurn,

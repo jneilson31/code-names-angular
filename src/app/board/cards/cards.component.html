@@ -1,5 +1,5 @@
 <!-- <div class="row">
-    <div *ngFor="let card of playingCards$ | async" class="card card-row"
+    <div (click)="onCardClick(card)" *ngFor="let card of playingCards$ | async" class="card card-row"
     [ngClass]="{'red-card': card.value === 'Red Agent',
                 'blue-card': card.value === 'Blue Agent',
                 'black-card': card.value === 'Assassin'}">
@@ -12,7 +12,7 @@
     </div>
 </div> -->
 <div class="row">
-  <div *ngFor="let card of playingCards$ | async" class="card card-row">
+  <div #card (click)="onCardClick(card)" *ngFor="let card of playingCards$ | async" class="card card-row">
     <div class="inside-card">
       <div class="word-box">
         <h6 class="mb-0">{{card.word}}</h6>
