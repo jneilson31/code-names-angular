@@ -19,8 +19,6 @@ export interface GameBoardVm {
   styleUrls: ['./board.component.scss']
 })
 export class BoardComponent implements OnInit {
-  redTeamCardsRemaining$ = this.cardsService.redAgentCards$;
-  blueTeamCardsRemaining$ = this.cardsService.blueAgentCards$;
   gameBoardVm$: Observable<GameBoardVm>;
 
   constructor(
