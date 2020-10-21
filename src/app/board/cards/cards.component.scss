@@ -23,6 +23,11 @@
     background: #cb2d3e;  /* fallback for old browsers */
     background: -webkit-linear-gradient(to bottom, #ef473a, #cb2d3e);  /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(to bottom, #ef473a, #cb2d3e); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    .inside-card {
+      border: 3px solid white;
+      border-radius: 4px;
+      padding: 8px;
+    }
   }
 
   .blue-card {
