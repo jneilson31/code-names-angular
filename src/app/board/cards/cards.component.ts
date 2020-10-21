@@ -14,7 +14,6 @@ export interface CardVm {
   styleUrls: ['./cards.component.scss']
 })
 export class CardsComponent implements OnInit {
-  @ViewChild('card') card: ElementRef;
   playingCards$ = this.cardsService.cardValuesAndCardDeck$;
   whoseTurn$ = this.gameManager.whoseTurn$;
   cardsVm$: Observable<CardVm>;
@@ -31,15 +30,12 @@ export class CardsComponent implements OnInit {
   public onCardClick(event, card): void {
     this.gameManager.checkTurnAndCardValue(card);
     if (card.value === CardValues.RedAgent) {
-      console.log(this.card);
       this.renderer.addClass(event.currentTarget, 'red-card');
     }
     if (card.value === CardValues.BlueAgent) {
-      console.log(this.card);
       this.renderer.addClass(event.currentTarget, 'blue-card');
     }
     if (card.value === CardValues.Assassin) {
-      console.log(this.card);
       this.renderer.addClass(event.currentTarget, 'black-card');
     }
   }

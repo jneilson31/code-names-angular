@@ -12,7 +12,7 @@
     </div>
 </div> -->
 <div class="row">
-  <div #card (click)="onCardClick($event, card)" *ngFor="let card of playingCards$ | async, let i = index" class="card">
+  <div (click)="onCardClick($event, card)" *ngFor="let card of playingCards$ | async, let i = index" class="card">
     <div class="inside-card">
       <div class="word-box">
         <h6 class="mb-0">{{card.word}}</h6>
