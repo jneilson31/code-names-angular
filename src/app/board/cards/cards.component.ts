@@ -29,11 +29,18 @@ export class CardsComponent implements OnInit {
   }
 
   public onCardClick(event, card): void {
-    console.log(event);
-    this.gameManager.checkTurnAndCardValue(event);
+    this.gameManager.checkTurnAndCardValue(card);
     if (card.value === CardValues.RedAgent) {
       console.log(this.card);
-      this.renderer.addClass(this.card.nativeElement, 'red-card');
+      this.renderer.addClass(event.currentTarget, 'red-card');
+    }
+    if (card.value === CardValues.BlueAgent) {
+      console.log(this.card);
+      this.renderer.addClass(event.currentTarget, 'blue-card');
+    }
+    if (card.value === CardValues.Assassin) {
+      console.log(this.card);
+      this.renderer.addClass(event.currentTarget, 'black-card');
     }
   }
 }
