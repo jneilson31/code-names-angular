@@ -14,8 +14,8 @@ export interface CardVm {
   styleUrls: ['./cards.component.scss']
 })
 export class CardsComponent implements OnInit {
-  playingCards$ = this.cardsService.cardValuesAndCardDeck$;
-  // playingCards$ = this.cardsService.initialDeck$;
+  // playingCards$ = this.cardsService.cardValuesAndCardDeck$;
+  playingCards$ = this.cardsService.initialDeck$;
 
   whoseTurn$ = this.gameManager.whoseTurn$;
   cardsVm$: Observable<CardVm>;

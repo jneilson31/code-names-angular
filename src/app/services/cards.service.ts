@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, BehaviorSubject, combineLatest } from 'rxjs';
-import { map, take, tap } from 'rxjs/operators';
+import { Observable, of, BehaviorSubject, combineLatest, partition } from 'rxjs';
+import { distinctUntilChanged, filter, map, shareReplay, take, tap } from 'rxjs/operators';
 import { GameManagerService } from './game-manager.service';
 
 export enum CardValues {
@@ -32,7 +32,7 @@ export class CardsService {
   private wordPool$: Observable<CodeNamesCard[]> = of([
     { word: 'turkey', value: CardValues.Bystander }, { word: 'king', value: CardValues.Bystander },
     { word: 'revolution', value: CardValues.Bystander }, { word: 'soap', value: CardValues.Bystander },
-    { word: 'shot', value: CardValues.Bystander }, { word: 'soap', value: CardValues.Bystander },
+    { word: 'shot', value: CardValues.Bystander }, { word: 'television', value: CardValues.Bystander },
     { word: 'fair', value: CardValues.Bystander }, { word: 'cheat', value: CardValues.Bystander },
     { word: 'gas', value: CardValues.Bystander }, { word: 'banana', value: CardValues.Bystander },
     { word: 'tooth', value: CardValues.Bystander }, { word: 'plant', value: CardValues.Bystander },
@@ -57,77 +57,41 @@ export class CardsService {
     { word: 'queen', value: CardValues.Bystander }, { word: 'time', value: CardValues.Bystander },
   ]);
 
-  public cardValuesAndCardDeck$ = combineLatest([
+  public initialDeck$: Observable<CodeNamesCard[]> = combineLatest([
     this.numberOfCardsInPlay$,
     this.wordPool$,
-    this.redAgentCards$,
-    this.blueAgentCards$,
-    this.assassinCards$,
-    ]).pipe(
-      map(([numberOfCardsInPlay, wordPool, redAgentCards, blueAgentCards, assassinCards]) => {
-        this.shuffleDeck(wordPool);
-        const cardDeck = wordPool.slice(0, numberOfCardsInPlay);
-        const redCards = cardDeck.slice(0, redAgentCards);
-        redCards.forEach(card => card.value = CardValues.RedAgent);
-        const blueCards = cardDeck.slice(redAgentCards, (blueAgentCards + redAgentCards));
-        blueCards.forEach(card => card.value = CardValues.BlueAgent);
-        const blackCards = cardDeck.slice((blueAgentCards + redAgentCards), (blueAgentCards + redAgentCards + assassinCards));
-        blackCards.forEach(card => card.value = CardValues.Assassin);
-        // console.log(`BlackCards: `, blackCards);
-        console.log(`redCards: `, redCards);
-        // console.log(`blueCards: `, blueCards);
-        // console.log(`cardDeck: `, cardDeck);
-        // return this.shuffleDeck(cardDeck);
-        console.log(`cardDeck: `, cardDeck);
-        return cardDeck;
-      }),
-      tap(deck => console.log(`dafda`, deck)),
-  );
+  ]).pipe(
+    map(([numberOfCards, wordPool]) => {
+      return wordPool.slice(0, numberOfCards)
+    }),
+    tap(cards => {
+      this.shuffleCards(cards);
+      this.assignCardValues(cards);
+      this.shuffleCards(cards);
+    }),
+    shareReplay(1),
+  )
 
-  // public initialDeck$ = combineLatest([
-  //   this.numberOfCardsInPlay$,
-  //   this.wordPool$
-  // ]).pipe(
-  //   map(([cardsInPlay, wordPool]) => {
-  //     this.shuffleDeck(wordPool);
-  //     return wordPool.slice(0, cardsInPlay);
-  //   }),
-  //   tap(deck => console.log(`initialDeck:`, deck)),
-  //   map(cards => cards.),
-  //   tap(deck => console.log(`initialDeck after take:`, deck)),
-  // );
-
-  // public actualRedCards$ = this.initialDeck$.pipe(
-  //   map(cards => cards.slice(0, this.redAgentCardsSubject.getValue())),
-  //   tap(cards => cards.forEach(card => card.value = CardValues.RedAgent)),
-  //   // map(cards => cards.filter(card => card.value === CardValues.RedAgent)),
-  //   tap(redCards => console.log(`RedCards: `, redCards)),
-  // );
-  public actualRedCards$ = this.cardValuesAndCardDeck$.pipe(
+  public assignedRedCards$: Observable<CodeNamesCard[]> = this.initialDeck$.pipe(
     map(cards => cards.filter(card => card.value === CardValues.RedAgent)),
-    tap(cards => console.log(`RedCards: `, cards)),
-  );
+    tap(results => console.log(`Result of RedCards: `, results)),
+  )
 
-  // public actualBlueCards$ = this.initialDeck$.pipe(
-  //   map(cards => cards.slice(0, this.blueAgentCardsSubject.getValue())),
-  //   tap(cards => cards.forEach(card => card.value = CardValues.BlueAgent)),
-  //   // map(cards => cards.filter(card => card.value === CardValues.BlueAgent)),
-  //   tap(blueCards => console.log(`BlueCards: `, blueCards)),
-  // );
+  public assignedBlueCards$: Observable<CodeNamesCard[]> = this.initialDeck$.pipe(
+    map(cards => cards.filter(card => card.value === CardValues.BlueAgent)),
+    tap(results => console.log(`Result of BlueCards: `, results)),
+  )
 
-
-
-
-
-  constructor() { }
-
-  public shuffleDeck(cards: CodeNamesCard[]): CodeNamesCard[] {
-    for (let i = cards.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * i);
-      const temp = cards[i];
-      cards[i] = cards[j];
-      cards[j] = temp;
-    }
+  public assignCardValues(cards: CodeNamesCard[]): CodeNamesCard[] {
+    const numOfRedCards = this.redAgentCardsSubject.getValue();
+    const numOfBlueCards = this.blueAgentCardsSubject.getValue();
+    const numOfAssassinCards = this.assassinsCardsSubject.getValue();
+    const redDeck = cards.slice(0, numOfRedCards);
+    const blueDeck = cards.slice(numOfRedCards, (numOfRedCards + numOfBlueCards));
+    const assassinCard = cards.slice(numOfBlueCards + numOfRedCards, numOfRedCards + numOfBlueCards + numOfAssassinCards);
+    redDeck.forEach(card => card.value = CardValues.RedAgent);
+    blueDeck.forEach(card => card.value = CardValues.BlueAgent);
+    assassinCard.forEach(card => card.value = CardValues.Assassin);
     return cards;
   }
 
@@ -137,5 +101,17 @@ export class CardsService {
 
   public updateNumberOfBlueCards(): any {
     this.blueAgentCardsSubject.next(this.blueAgentCardsSubject.getValue() + 1);
+  }
+
+  public shuffleCards(array: CodeNamesCard[]) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+    while (0 !== currentIndex) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+    return array;
   }
 }

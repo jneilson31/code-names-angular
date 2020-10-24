@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { CardsService } from '../services/cards.service';
+import { CardsService, CodeNamesCard } from '../services/cards.service';
 import { GameManagerService } from '../services/game-manager.service';
 import { TimerService } from '../services/timer.service';
 
 export interface GameBoardVm {
   whoseTurn: string;
-  redTeamCardsRemaining: number;
-  blueTeamCardsRemaining: number;
+  redTeamCardsRemaining: CodeNamesCard[];
+  blueTeamCardsRemaining: CodeNamesCard[];
   gameTimer: number;
 
 }
@@ -30,8 +30,8 @@ export class BoardComponent implements OnInit {
   ngOnInit(): void {
     this.gameBoardVm$ = combineLatest([
       this.gameManager.whoseTurn$,
-      this.cardsService.redAgentCards$,
-      this.cardsService.blueAgentCards$,
+      this.cardsService.assignedRedCards$,
+      this.cardsService.assignedBlueCards$,
       this.timerService.timer$,
     ]).pipe(
       map(([
@@ -51,8 +51,8 @@ export class BoardComponent implements OnInit {
 
     this.gameManager.setupInitialGame();
 
-    this.cardsService.actualRedCards$.subscribe();
-    // this.cardsService.actualBlueCards$.subscribe();
+    this.cardsService.assignedRedCards$.subscribe();
+    this.cardsService.assignedBlueCards$.subscribe();
   }
 
 }

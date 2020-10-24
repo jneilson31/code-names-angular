@@ -7,11 +7,11 @@
 }
 
 .red-team-turn {
-  background-color: red;
+  background-color:  #ef473a;
 }
 
 .blue-team-turn {
-  background-color: blue;
+  background-color: #2F80ED;
 }
 
 .card {
@@ -19,6 +19,18 @@
   padding: 20px;
   border-radius: 6px;
   background-color: gray
+}
+
+.red-card {
+  background: #cb2d3e;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to bottom, #ef473a, #cb2d3e);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to bottom, #ef473a, #cb2d3e); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.blue-card {
+  background: #56CCF2;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to top, #2F80ED, #56CCF2);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to top, #2F80ED, #56CCF2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 .card:not(:first-of-type){

@@ -2,9 +2,9 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col">
-        <h4 class="text-center">Red Team Cards: {{vm.redTeamCardsRemaining}} </h4>
+        <h4 class="text-center">Red Team Cards: {{vm.redTeamCardsRemaining.length}} </h4>
         <div class="row justify-content-center">
-          <div class="col-8 card">
+          <div *ngFor="let card of vm.redTeamCardsRemaining" class="col-8 card red-card">
           </div>
         </div>
       </div>
@@ -12,19 +12,9 @@
         <app-cards></app-cards>
       </div>
       <div class="col">
-        <h4 class="text-center">Blue Team Cards: {{vm.blueTeamCardsRemaining}}</h4>
+        <h4 class="text-center">Blue Team Cards: {{vm.blueTeamCardsRemaining.length}}</h4>
         <div class="row justify-content-center">
-          <div class="col-8 card">
-            <h1>card</h1>
-          </div>
-          <div class="col-8 card">
-            <h1>card</h1>
-          </div>
-          <div class="col-8 card">
-            <h1>card</h1>
-          </div>
-          <div class="col-8 card">
-            <h1>card</h1>
+          <div *ngFor="let card of vm.blueTeamCardsRemaining" class="col-8 card blue-card">
           </div>
         </div>
       </div>
