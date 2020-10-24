@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, BehaviorSubject, combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take, tap } from 'rxjs/operators';
 import { GameManagerService } from './game-manager.service';
 
 export enum CardValues {
@@ -73,13 +73,49 @@ export class CardsService {
         blueCards.forEach(card => card.value = CardValues.BlueAgent);
         const blackCards = cardDeck.slice((blueAgentCards + redAgentCards), (blueAgentCards + redAgentCards + assassinCards));
         blackCards.forEach(card => card.value = CardValues.Assassin);
-        console.log(`BlackCards: `, blackCards);
+        // console.log(`BlackCards: `, blackCards);
         console.log(`redCards: `, redCards);
-        console.log(`blueCards: `, blueCards);
+        // console.log(`blueCards: `, blueCards);
+        // console.log(`cardDeck: `, cardDeck);
+        // return this.shuffleDeck(cardDeck);
         console.log(`cardDeck: `, cardDeck);
-        return this.shuffleDeck(cardDeck);
+        return cardDeck;
       }),
+      tap(deck => console.log(`dafda`, deck)),
   );
+
+  // public initialDeck$ = combineLatest([
+  //   this.numberOfCardsInPlay$,
+  //   this.wordPool$
+  // ]).pipe(
+  //   map(([cardsInPlay, wordPool]) => {
+  //     this.shuffleDeck(wordPool);
+  //     return wordPool.slice(0, cardsInPlay);
+  //   }),
+  //   tap(deck => console.log(`initialDeck:`, deck)),
+  //   map(cards => cards.),
+  //   tap(deck => console.log(`initialDeck after take:`, deck)),
+  // );
+
+  // public actualRedCards$ = this.initialDeck$.pipe(
+  //   map(cards => cards.slice(0, this.redAgentCardsSubject.getValue())),
+  //   tap(cards => cards.forEach(card => card.value = CardValues.RedAgent)),
+  //   // map(cards => cards.filter(card => card.value === CardValues.RedAgent)),
+  //   tap(redCards => console.log(`RedCards: `, redCards)),
+  // );
+  public actualRedCards$ = this.cardValuesAndCardDeck$.pipe(
+    map(cards => cards.filter(card => card.value === CardValues.RedAgent)),
+    tap(cards => console.log(`RedCards: `, cards)),
+  );
+
+  // public actualBlueCards$ = this.initialDeck$.pipe(
+  //   map(cards => cards.slice(0, this.blueAgentCardsSubject.getValue())),
+  //   tap(cards => cards.forEach(card => card.value = CardValues.BlueAgent)),
+  //   // map(cards => cards.filter(card => card.value === CardValues.BlueAgent)),
+  //   tap(blueCards => console.log(`BlueCards: `, blueCards)),
+  // );
+
+
 
 
 

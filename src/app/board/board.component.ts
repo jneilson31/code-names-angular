@@ -50,6 +50,9 @@ export class BoardComponent implements OnInit {
     );
 
     this.gameManager.setupInitialGame();
+
+    this.cardsService.actualRedCards$.subscribe();
+    // this.cardsService.actualBlueCards$.subscribe();
   }
 
 }

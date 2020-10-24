@@ -15,6 +15,8 @@ export interface CardVm {
 })
 export class CardsComponent implements OnInit {
   playingCards$ = this.cardsService.cardValuesAndCardDeck$;
+  // playingCards$ = this.cardsService.initialDeck$;
+
   whoseTurn$ = this.gameManager.whoseTurn$;
   cardsVm$: Observable<CardVm>;
 
@@ -29,6 +31,10 @@ export class CardsComponent implements OnInit {
 
   public onCardClick(event, card): void {
     this.gameManager.checkTurnAndCardValue(card);
+    this.revealCardValue(event, card);
+  }
+
+  private revealCardValue(event, card) {
     if (card.value === CardValues.RedAgent) {
       this.renderer.addClass(event.currentTarget, 'red-card');
     }
@@ -38,5 +44,16 @@ export class CardsComponent implements OnInit {
     if (card.value === CardValues.Assassin) {
       this.renderer.addClass(event.currentTarget, 'black-card');
     }
+    if (card.value === CardValues.Bystander) {
+      this.renderer.addClass(event.currentTarget, 'brown-card');
+    }
+  }
+
+  public revealCardLegend(card): void {
+    console.log("revealed card values");
+  }
+
+  public revealGameBoard(): void {
+    console.log("back to normal");
   }
 }

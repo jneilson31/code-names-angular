@@ -25,8 +25,6 @@
     background: linear-gradient(to bottom, #ef473a, #cb2d3e); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     .inside-card {
       border: 3px solid #e69ea5;
-      border-radius: 4px;
-      padding: 8px;
     }
   }
 
@@ -36,8 +34,6 @@
     background: linear-gradient(to top, #2F80ED, #56CCF2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     .inside-card {
       border: 3px solid #99d5e9;
-      border-radius: 4px;
-      padding: 8px;
     }
   }
 
@@ -48,8 +44,17 @@
     color: white;
     .inside-card {
       border: 3px solid #697074;
-      border-radius: 4px;
-      padding: 8px;
+    }
+  }
+
+  .brown-card {
+    background: rgb(94,84,70);
+    background: -moz-linear-gradient(to top, rgba(94,84,70,1) 0%, rgba(214,186,147,1) 100%);
+    background: -webkit-linear-gradient(to top, rgba(94,84,70,1) 0%, rgba(214,186,147,1) 100%);
+    background: linear-gradient(to top, rgba(94,84,70,1) 0%, rgba(214,186,147,1) 100%);
+    color: white;
+    .inside-card {
+      border: 3px solid rgba(94,84,70,1);
     }
   }
 }

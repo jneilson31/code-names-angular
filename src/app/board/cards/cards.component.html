@@ -11,6 +11,7 @@
       <h6 class="mb-0 text-center">{{card.value}}</h6>
     </div>
 </div> -->
+<button class="btn btn-warning mb-4">Spymaster Legend</button>
 <div class="row">
   <div (click)="onCardClick($event, card)" *ngFor="let card of playingCards$ | async, let i = index" class="card">
     <div class="inside-card">
