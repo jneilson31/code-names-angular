@@ -31,14 +31,16 @@ export class CardsComponent implements OnInit {
 
   public onCardClick(event, card): void {
     this.gameManager.checkTurnAndCardValue(card);
-    this.revealCardValue(event, card);
+    this.revealCardValueAndUpdate(event, card);
   }
 
-  private revealCardValue(event, card) {
+  private revealCardValueAndUpdate(event, card) {
     if (card.value === CardValues.RedAgent) {
+      this.cardsService.updateNumberOfRedCards(false);
       this.renderer.addClass(event.currentTarget, 'red-card');
     }
     if (card.value === CardValues.BlueAgent) {
+      this.cardsService.updateNumberOfBlueCards(false);
       this.renderer.addClass(event.currentTarget, 'blue-card');
     }
     if (card.value === CardValues.Assassin) {

@@ -7,8 +7,8 @@ import { TimerService } from '../services/timer.service';
 
 export interface GameBoardVm {
   whoseTurn: string;
-  redTeamCardsRemaining: CodeNamesCard[];
-  blueTeamCardsRemaining: CodeNamesCard[];
+  redTeamCards: CodeNamesCard[];
+  blueTeamCards: CodeNamesCard[];
   gameTimer: number;
 
 }
@@ -42,17 +42,14 @@ export class BoardComponent implements OnInit {
       ]) => {
         return {
           whoseTurn: colorOfFirstTurn,
-          redTeamCardsRemaining: redAgentCards,
-          blueTeamCardsRemaining: blueAgentCards,
+          redTeamCards: redAgentCards,
+          blueTeamCards: blueAgentCards,
           gameTimer
         };
       })
     );
 
     this.gameManager.setupInitialGame();
-
-    this.cardsService.assignedRedCards$.subscribe();
-    this.cardsService.assignedBlueCards$.subscribe();
   }
 
 }

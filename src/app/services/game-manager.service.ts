@@ -3,6 +3,11 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { CardsService, CardValues } from './cards.service';
 import { TimerService } from './timer.service';
 
+export enum whoseTurn {
+  RedAgent = 'red',
+  BlueAgent = 'blue',
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -23,12 +28,12 @@ export class GameManagerService {
   private assignTeamThatGoesFirst(): void {
     const randomNumber = Math.floor(Math.random() * 100);
     if (randomNumber % 2) {
-      this.whoseTurnSubject.next('red');
-      this.cardsService.updateNumberOfRedCards();
+      this.whoseTurnSubject.next(whoseTurn.RedAgent);
+      this.cardsService.updateNumberOfRedCards(true);
 
     } else {
-      this.whoseTurnSubject.next('blue');
-      this.cardsService.updateNumberOfBlueCards();
+      this.whoseTurnSubject.next(whoseTurn.BlueAgent);
+      this.cardsService.updateNumberOfBlueCards(true);
 
     }
   }

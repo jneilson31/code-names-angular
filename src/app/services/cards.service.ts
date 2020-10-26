@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, BehaviorSubject, combineLatest, partition } from 'rxjs';
-import { distinctUntilChanged, filter, map, shareReplay, take, tap } from 'rxjs/operators';
-import { GameManagerService } from './game-manager.service';
+import { Observable, of, BehaviorSubject, combineLatest } from 'rxjs';
+import { map, shareReplay, tap } from 'rxjs/operators';
 
 export enum CardValues {
   RedAgent = 'Red Agent',
@@ -21,9 +20,9 @@ export class CardsService {
   private numberOfCardsInPlaySubject: BehaviorSubject<number> = new BehaviorSubject(25);
   public numberOfCardsInPlay$: Observable<number> = this.numberOfCardsInPlaySubject.asObservable();
   private redAgentCardsSubject: BehaviorSubject<number> = new BehaviorSubject(8);
-  public redAgentCards$: Observable<number> = this.redAgentCardsSubject.asObservable();
+  // public redAgentCards$: Observable<number> = this.redAgentCardsSubject.asObservable();
   private blueAgentCardsSubject: BehaviorSubject<number> = new BehaviorSubject(8);
-  public blueAgentCards$: Observable<number> = this.blueAgentCardsSubject.asObservable();
+  // public blueAgentCards$: Observable<number> = this.blueAgentCardsSubject.asObservable();
   private assassinsCardsSubject: BehaviorSubject<number> = new BehaviorSubject(1);
   public assassinCards$: Observable<number> = this.assassinsCardsSubject.asObservable();
   private colorOfFirstTurnSubject: BehaviorSubject<string> = new BehaviorSubject(null);
@@ -95,12 +94,16 @@ export class CardsService {
     return cards;
   }
 
-  public updateNumberOfRedCards(): any {
-    this.redAgentCardsSubject.next(this.redAgentCardsSubject.getValue() + 1);
+  public updateNumberOfRedCards(startOfGame?: boolean): void {
+    !startOfGame ? this.redAgentCardsSubject.next(this.redAgentCardsSubject.getValue() - 1) : this.redAgentCardsSubject.next(this.redAgentCardsSubject.getValue() + 1);
+    console.log(`redCardUpdate: `, this.redAgentCardsSubject.getValue());
+
   }
 
-  public updateNumberOfBlueCards(): any {
-    this.blueAgentCardsSubject.next(this.blueAgentCardsSubject.getValue() + 1);
+  public updateNumberOfBlueCards(startOfGame?: boolean): void {
+    !startOfGame ? this.blueAgentCardsSubject.next(this.blueAgentCardsSubject.getValue() - 1) : this.blueAgentCardsSubject.next(this.blueAgentCardsSubject.getValue() + 1);
+    console.log(`blueCardUpdate: `, this.blueAgentCardsSubject.getValue());
+
   }
 
   public shuffleCards(array: CodeNamesCard[]) {
