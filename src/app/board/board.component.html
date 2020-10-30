@@ -2,11 +2,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col">
-        <h4 class="text-center">Red Team Cards: {{vm.redTeamCards.length}} </h4>
-        <div class="row justify-content-center">
-          <div *ngFor="let card of vm.redTeamCards" class="col-8 card red-card">
-          </div>
-        </div>
+        <app-red-deck></app-red-deck>
       </div>
       <div class="col-6 text-center">
         <app-cards></app-cards>
@@ -21,7 +17,7 @@
     </div>
   </div>
   <div class="turn-indicator text-center" [ngClass]="vm.whoseTurn === 'red' ? 'red-team-turn' : 'blue-team-turn'">{{vm.whoseTurn | titlecase}} team, it's your turn!</div>
-  <h1 class="text-center">Time Remaining: <span>{{vm.gameTimer}}</span> seconds</h1>
+  <!-- <h1 class="text-center">Time Remaining: <span>{{vm.gameTimer}}</span> seconds</h1> -->
 </div>
 
 

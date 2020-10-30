@@ -95,15 +95,17 @@ export class CardsService {
   }
 
   public updateNumberOfRedCards(startOfGame?: boolean): void {
-    !startOfGame ? this.redAgentCardsSubject.next(this.redAgentCardsSubject.getValue() - 1) : this.redAgentCardsSubject.next(this.redAgentCardsSubject.getValue() + 1);
+    !startOfGame
+    ? this.redAgentCardsSubject.next(this.redAgentCardsSubject.getValue() - 1)
+    : this.redAgentCardsSubject.next(this.redAgentCardsSubject.getValue() + 1);
     console.log(`redCardUpdate: `, this.redAgentCardsSubject.getValue());
-
   }
 
   public updateNumberOfBlueCards(startOfGame?: boolean): void {
-    !startOfGame ? this.blueAgentCardsSubject.next(this.blueAgentCardsSubject.getValue() - 1) : this.blueAgentCardsSubject.next(this.blueAgentCardsSubject.getValue() + 1);
+    !startOfGame
+    ? this.blueAgentCardsSubject.next(this.blueAgentCardsSubject.getValue() - 1)
+    : this.blueAgentCardsSubject.next(this.blueAgentCardsSubject.getValue() + 1);
     console.log(`blueCardUpdate: `, this.blueAgentCardsSubject.getValue());
-
   }
 
   public shuffleCards(array: CodeNamesCard[]) {
