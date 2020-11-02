@@ -12,10 +12,6 @@ export enum whoseTurn {
   providedIn: 'root'
 })
 export class GameManagerService {
-
-  // private colorOfFirstTurnSubject: BehaviorSubject<string> = new BehaviorSubject(null);
-  // public colorOfFirstTurn$: Observable<string> = this.colorOfFirstTurnSubject.asObservable();
-
   private whoseTurnSubject: BehaviorSubject<string> = new BehaviorSubject(null);
   public whoseTurn$: Observable<string> = this.whoseTurnSubject.asObservable();
 

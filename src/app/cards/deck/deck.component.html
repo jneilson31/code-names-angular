@@ -1,0 +1,7 @@
+<ng-container *ngIf="deckVm$ | async as vm">
+  <h4 class="text-center">{{color | titlecase}} Team Cards: {{vm.cardsRemaining}} </h4>
+  <div class="row justify-content-center">
+    <div *ngFor="let card of vm.agentDeck" [ngClass]="color === 'red' ? 'red-card' : 'blue-card'" class="col-8 card">
+    </div>
+  </div>
+</ng-container>

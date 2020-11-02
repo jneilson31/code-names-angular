@@ -16,6 +16,7 @@ export interface CardVm {
 export class CardsComponent implements OnInit {
   // playingCards$ = this.cardsService.codeNamesCardDeck$;
   // playingCards$ = this.cardsService.initialDeck$;
+  playingCards$ = this.cardsService.cardDeck$$;
 
   whoseTurn$ = this.gameManager.whoseTurn$;
   cardsVm$: Observable<CardVm>;
