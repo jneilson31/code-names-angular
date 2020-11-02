@@ -29,11 +29,12 @@ export class GameManagerService {
     const randomNumber = Math.floor(Math.random() * 100);
     if (randomNumber % 2) {
       this.whoseTurnSubject.next(whoseTurn.RedAgent);
-      this.cardsService.updateNumberOfRedCards(true);
+      this.cardsService.updateCardSubjects(CardValues.RedAgent);
 
     } else {
       this.whoseTurnSubject.next(whoseTurn.BlueAgent);
-      this.cardsService.updateNumberOfBlueCards(true);
+      this.cardsService.updateCardSubjects(CardValues.BlueAgent);
+
 
     }
   }

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { CardsService } from 'src/app/services/cards.service';
+import { map, tap } from 'rxjs/operators';
+import { CardsService, CodeNamesCard } from 'src/app/services/cards.service';
 
 export interface ColorDeckVm {
-  remainingCards: number;
+  cards: CodeNamesCard[];
 }
 
 @Component({
@@ -22,9 +22,10 @@ export class RedDeckComponent implements OnInit {
     this.redDeckVm$ = this.cardsService.assignedRedCards$.pipe(
       map((cards) => {
         return {
-          remainingCards: cards.length
+          cards: cards
         }
-      })
+      }),
+      tap(results => console.log(results)),
     );
   }
 
