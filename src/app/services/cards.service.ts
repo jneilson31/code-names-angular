@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
-import { map, shareReplay, take, tap } from 'rxjs/operators';
+import { map, shareReplay, take } from 'rxjs/operators';
 
 export enum CardValues {
   RedAgent = 'Red Agent',
@@ -21,10 +21,10 @@ export class CardsService {
   private numberOfRedAgentCards$$: BehaviorSubject<number> = new BehaviorSubject(8);
   private numberOfBlueAgentCards$$: BehaviorSubject<number> = new BehaviorSubject(8);
   private numberOfAssassinCards$$: BehaviorSubject<number> = new BehaviorSubject(1);
-  private exisitingRedDeck$$: BehaviorSubject<CodeNamesCard[]> = new BehaviorSubject([]);
-  public exisitingRedCards$: Observable<CodeNamesCard[]> = this.exisitingRedDeck$$.asObservable();
-  private existingBlueDeck$$: BehaviorSubject<CodeNamesCard[]> = new BehaviorSubject([]);
-  public existingBlueDeck$: Observable<CodeNamesCard[]> = this.existingBlueDeck$$.asObservable();
+  private redAgentDeck$$: BehaviorSubject<CodeNamesCard[]> = new BehaviorSubject([]);
+  public redAgentDeck$: Observable<CodeNamesCard[]> = this.redAgentDeck$$.asObservable();
+  private blueAgentDeck$$: BehaviorSubject<CodeNamesCard[]> = new BehaviorSubject([]);
+  public blueAgentDeck$: Observable<CodeNamesCard[]> = this.blueAgentDeck$$.asObservable();
 
   private wordPool: string[] = [
     'turkey', 'king', 'revolution', 'soap',
@@ -56,8 +56,10 @@ export class CardsService {
         const deck = this.wordPool.slice(0, numberOfCardsInPlay);
         const redCardList = this.assignCardValues(deck.slice(
           0, numberOfRedCards), CardValues.RedAgent);
+        this.redAgentDeck$$.next(redCardList);
         const blueCardList = this.assignCardValues(deck.slice(
           numberOfRedCards, numberOfBlueCards + numberOfRedCards), CardValues.BlueAgent);
+        this.blueAgentDeck$$.next(blueCardList);
         const assassinCardList = this.assignCardValues(deck.slice(
           (numberOfBlueCards + numberOfRedCards),
           numberOfBlueCards + numberOfRedCards + numberOfAssassinCards), CardValues.Assassin);
@@ -71,43 +73,27 @@ export class CardsService {
       shareReplay(),
   );
 
-  public redCardDeck$: Observable<CodeNamesCard[]> = this.cardDeck$.pipe(
-    map(cards => {
-      const redDeck = cards.filter(card => card.value === CardValues.RedAgent);
-      return redDeck;
-    }),
-    tap(result => this.exisitingRedDeck$$.next(result))
-  );
-
-  public blueCardDeck$: Observable<CodeNamesCard[]> = this.cardDeck$.pipe(
-    map(cards => {
-      const blueDeck = cards.filter(card => card.value === CardValues.BlueAgent);
-      return blueDeck;
-    }),
-    tap(result => this.existingBlueDeck$$.next(result))
-  );
-
   public removeCardFromDeck(cardFromClick: CodeNamesCard): void {
     const wordOfCardToRemove = cardFromClick.word;
     if (cardFromClick.value === CardValues.RedAgent) {
-      this.exisitingRedDeck$$.pipe(
+      this.redAgentDeck$$.pipe(
         take(1),
         map(cards => {
           const updatedRedDeck = cards.filter(card => card.word !== wordOfCardToRemove);
-          console.log(`actualRedDeckBeforeNext `, this.exisitingRedDeck$$.getValue());
-          this.exisitingRedDeck$$.next(updatedRedDeck);
-          console.log(`actualRedDeckAfterNext `, this.exisitingRedDeck$$.getValue());
+          console.log(`actualRedDeckBeforeNext `, this.redAgentDeck$$.getValue());
+          this.redAgentDeck$$.next(updatedRedDeck);
+          console.log(`actualRedDeckAfterNext `, this.redAgentDeck$$.getValue());
         }),
       ).subscribe();
     }
     if (cardFromClick.value === CardValues.BlueAgent) {
-      this.existingBlueDeck$$.pipe(
+      this.blueAgentDeck$$.pipe(
         take(1),
         map(cards => {
           const updatedBlueDeck = cards.filter(card => card.word !== wordOfCardToRemove);
-          console.log(`actualBlueDeckBeforeNext `, this.existingBlueDeck$$.getValue());
-          this.existingBlueDeck$$.next(updatedBlueDeck);
-          console.log(`actualBlueDeckAfterNext `, this.existingBlueDeck$$.getValue());
+          console.log(`actualBlueDeckBeforeNext `, this.blueAgentDeck$$.getValue());
+          this.blueAgentDeck$$.next(updatedBlueDeck);
+          console.log(`actualBlueDeckAfterNext `, this.blueAgentDeck$$.getValue());
         }),
       ).subscribe();
     }
@@ -138,12 +124,3 @@ export class CardsService {
     : this.numberOfBlueAgentCards$$.next(this.numberOfBlueAgentCards$$.getValue() + 1);
   }
 }
-
-
-// cardDeck that doesn't change, it's the same throughout the entire game, board references this.
-
-// redDeckSubject that can change when the word from it is clicked on
-// redDeckObservable that is based off the subject.
-
-// blueDeckSubject that can change when the word from it is clicked on
-// blueDeckObservable that is based off the subject.

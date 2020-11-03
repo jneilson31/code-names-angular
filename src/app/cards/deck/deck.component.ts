@@ -1,11 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { delay, map } from 'rxjs/operators';
 import { CardsService, CodeNamesCard } from 'src/app/services/cards.service';
 
 export interface DeckVm {
-  // redAgentDeck: CodeNamesCard[];
-  // blueAgentDeck: CodeNamesCard[];
+  redAgentDeck: CodeNamesCard[];
+  blueAgentDeck: CodeNamesCard[];
   agentDeck: CodeNamesCard[];
   cardsRemaining: number;
 }
@@ -25,17 +25,16 @@ export class DeckComponent implements OnInit {
 
   ngOnInit(): void {
     this.deckVm$ = combineLatest([
-      this.cardsService.redCardDeck$,
-      this.cardsService.blueCardDeck$,
-      this.cardsService.exisitingRedCards$,
-      this.cardsService.existingBlueDeck$,
+      this.cardsService.redAgentDeck$,
+      this.cardsService.blueAgentDeck$,
     ]).pipe(
-      map(([redDeck, blueDeck, remainingRedCards, remainingBlueCards]) => {
+      delay(0),
+      map(([redDeck, blueDeck]) => {
         return {
           redAgentDeck: redDeck,
           blueAgentDeck: blueDeck,
-          agentDeck: this.color === 'red' ? remainingRedCards : remainingBlueCards,
-          cardsRemaining: this.color === 'red' ? remainingRedCards.length : remainingBlueCards.length
+          agentDeck: this.color === 'red' ? redDeck : blueDeck,
+          cardsRemaining: this.color === 'red' ? redDeck.length : blueDeck.length
         };
       })
     );
