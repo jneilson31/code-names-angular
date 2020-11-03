@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { map, shareReplay, take, tap } from 'rxjs/operators';
 
 export enum CardValues {
   RedAgent = 'Red Agent',
@@ -18,9 +18,13 @@ export interface CodeNamesCard {
 })
 export class CardsService {
   private numberOfCardsInPlay$$: BehaviorSubject<number> = new BehaviorSubject(25);
-  private redAgentCards$$: BehaviorSubject<number> = new BehaviorSubject(8);
-  private blueAgentCards$$: BehaviorSubject<number> = new BehaviorSubject(8);
-  private assassinCards$$: BehaviorSubject<number> = new BehaviorSubject(1);
+  private numberOfRedAgentCards$$: BehaviorSubject<number> = new BehaviorSubject(8);
+  private numberOfBlueAgentCards$$: BehaviorSubject<number> = new BehaviorSubject(8);
+  private numberOfAssassinCards$$: BehaviorSubject<number> = new BehaviorSubject(1);
+  private exisitingRedDeck$$: BehaviorSubject<CodeNamesCard[]> = new BehaviorSubject([]);
+  public exisitingRedCards$: Observable<CodeNamesCard[]> = this.exisitingRedDeck$$.asObservable();
+  private existingBlueDeck$$: BehaviorSubject<CodeNamesCard[]> = new BehaviorSubject([]);
+  public existingBlueDeck$: Observable<CodeNamesCard[]> = this.existingBlueDeck$$.asObservable();
 
   private wordPool: string[] = [
     'turkey', 'king', 'revolution', 'soap',
@@ -37,11 +41,11 @@ export class CardsService {
     'oil', 'journey', 'life', 'pirate',
     'queen', 'time'];
 
-  public cardDeck$$: Observable<CodeNamesCard[]> = combineLatest([
+  public cardDeck$: Observable<CodeNamesCard[]> = combineLatest([
     this.numberOfCardsInPlay$$,
-    this.redAgentCards$$,
-    this.blueAgentCards$$,
-    this.assassinCards$$,
+    this.numberOfRedAgentCards$$,
+    this.numberOfBlueAgentCards$$,
+    this.numberOfAssassinCards$$,
   ]).pipe(
     map(([
       numberOfCardsInPlay,
@@ -67,13 +71,47 @@ export class CardsService {
       shareReplay(),
   );
 
-  public redCardDeck$: Observable<CodeNamesCard[]> = this.cardDeck$$.pipe(
-    map(cards => cards.filter(card => card.value === CardValues.RedAgent)),
+  public redCardDeck$: Observable<CodeNamesCard[]> = this.cardDeck$.pipe(
+    map(cards => {
+      const redDeck = cards.filter(card => card.value === CardValues.RedAgent);
+      return redDeck;
+    }),
+    tap(result => this.exisitingRedDeck$$.next(result))
   );
 
-  public blueCardDeck$: Observable<CodeNamesCard[]> = this.cardDeck$$.pipe(
-    map(cards => cards.filter(card => card.value === CardValues.BlueAgent)),
+  public blueCardDeck$: Observable<CodeNamesCard[]> = this.cardDeck$.pipe(
+    map(cards => {
+      const blueDeck = cards.filter(card => card.value === CardValues.BlueAgent);
+      return blueDeck;
+    }),
+    tap(result => this.existingBlueDeck$$.next(result))
   );
+
+  public removeCardFromDeck(cardFromClick: CodeNamesCard): void {
+    const wordOfCardToRemove = cardFromClick.word;
+    if (cardFromClick.value === CardValues.RedAgent) {
+      this.exisitingRedDeck$$.pipe(
+        take(1),
+        map(cards => {
+          const updatedRedDeck = cards.filter(card => card.word !== wordOfCardToRemove);
+          console.log(`actualRedDeckBeforeNext `, this.exisitingRedDeck$$.getValue());
+          this.exisitingRedDeck$$.next(updatedRedDeck);
+          console.log(`actualRedDeckAfterNext `, this.exisitingRedDeck$$.getValue());
+        }),
+      ).subscribe();
+    }
+    if (cardFromClick.value === CardValues.BlueAgent) {
+      this.existingBlueDeck$$.pipe(
+        take(1),
+        map(cards => {
+          const updatedBlueDeck = cards.filter(card => card.word !== wordOfCardToRemove);
+          console.log(`actualBlueDeckBeforeNext `, this.existingBlueDeck$$.getValue());
+          this.existingBlueDeck$$.next(updatedBlueDeck);
+          console.log(`actualBlueDeckAfterNext `, this.existingBlueDeck$$.getValue());
+        }),
+      ).subscribe();
+    }
+  }
 
   private assignCardValues(words: string[], agentColor: CardValues): CodeNamesCard[] {
     return words.map(word => ({
@@ -96,7 +134,16 @@ export class CardsService {
 
   public updateCardSubjects(colorToUpdate: CardValues) {
     colorToUpdate === CardValues.RedAgent
-    ? this.redAgentCards$$.next(this.redAgentCards$$.getValue() + 1)
-    : this.blueAgentCards$$.next(this.blueAgentCards$$.getValue() + 1);
+    ? this.numberOfRedAgentCards$$.next(this.numberOfRedAgentCards$$.getValue() + 1)
+    : this.numberOfBlueAgentCards$$.next(this.numberOfBlueAgentCards$$.getValue() + 1);
   }
 }
+
+
+// cardDeck that doesn't change, it's the same throughout the entire game, board references this.
+
+// redDeckSubject that can change when the word from it is clicked on
+// redDeckObservable that is based off the subject.
+
+// blueDeckSubject that can change when the word from it is clicked on
+// blueDeckObservable that is based off the subject.

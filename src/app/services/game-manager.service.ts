@@ -50,11 +50,11 @@ export class GameManagerService {
       console.log(`That was red's card!`);
       this.whoseTurnSubject.next('red');
     }
-    if ((this.whoseTurnSubject.value === 'red' || this.whoseTurnSubject.value === 'blue') && card.value === CardValues.Bystander) {
+    if (card.value === CardValues.Bystander) {
       console.log('That card was an innocent bystander');
       this.whoseTurnSubject.getValue() === 'blue' ? this.whoseTurnSubject.next('red') : this.whoseTurnSubject.next('blue');
     }
-    if ((this.whoseTurnSubject.value === 'red' || this.whoseTurnSubject.value === 'blue') && card.value === CardValues.Assassin) {
+    if (card.value === CardValues.Assassin) {
       console.log('You have been assassinated. Game Over');
       alert('You have been assassinated. Game Over');
     }

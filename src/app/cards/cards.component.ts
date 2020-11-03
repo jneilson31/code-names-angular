@@ -14,12 +14,8 @@ export interface CardVm {
   styleUrls: ['./cards.component.scss']
 })
 export class CardsComponent implements OnInit {
-  // playingCards$ = this.cardsService.codeNamesCardDeck$;
-  // playingCards$ = this.cardsService.initialDeck$;
-  playingCards$ = this.cardsService.cardDeck$$;
-
+  playingCards$ = this.cardsService.cardDeck$;
   whoseTurn$ = this.gameManager.whoseTurn$;
-  cardsVm$: Observable<CardVm>;
 
   constructor(
     private cardsService: CardsService,
@@ -30,19 +26,21 @@ export class CardsComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  // public onCardClick(event, card): void {
+  //   this.gameManager.checkTurnAndCardValue(card);
+  //   this.revealCardValue(event, card);
+  // }
+
   public onCardClick(event, card): void {
-    this.gameManager.checkTurnAndCardValue(card);
-    this.revealCardValueAndUpdate(event, card);
-    // this.cardsService.updateRedCardsNegative(card);
+    console.log(`card: `, card);
+    this.cardsService.removeCardFromDeck(card);
   }
 
-  private revealCardValueAndUpdate(event, card) {
+  private revealCardValue(event, card) {
     if (card.value === CardValues.RedAgent) {
-      // this.cardsService.updateNumberOfRedCards(false);
       this.renderer.addClass(event.currentTarget, 'red-card');
     }
     if (card.value === CardValues.BlueAgent) {
-      // this.cardsService.updateNumberOfBlueCards(false);
       this.renderer.addClass(event.currentTarget, 'blue-card');
     }
     if (card.value === CardValues.Assassin) {
