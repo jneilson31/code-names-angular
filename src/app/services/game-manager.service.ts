@@ -60,12 +60,6 @@ export class GameManagerService {
     }
   }
 
-  private updateWhoseTurn(): void {
-    this.whoseTurnSubject.value === 'red'
-    ? this.whoseTurnSubject.next('blue')
-    : this.whoseTurnSubject.next('red');
-  }
-
   // private startCountdown(seconds): void {
   //   let counter = seconds;
   //   const interval = setInterval(() => {

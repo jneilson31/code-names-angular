@@ -1,5 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer2, ViewChild, ViewChildren } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { CardsService, CardValues, CodeNamesCard } from 'src/app/services/cards.service';
 import { GameManagerService } from 'src/app/services/game-manager.service';
 
@@ -28,11 +27,6 @@ export class CardsComponent implements OnInit {
     this.showLegend = false;
   }
 
-  // public onCardClick(event, card): void {
-  //   this.gameManager.checkTurnAndCardValue(card);
-  //   this.revealCardValue(event, card);
-  // }
-
   public onCardClick(event, card): void {
     this.gameManager.checkTurnAndCardValue(card);
     this.cardsService.removeCardFromDeck(card);
@@ -56,15 +50,9 @@ export class CardsComponent implements OnInit {
 
   public revealCardLegend(): void {
     this.showLegend = true;
-    console.log('mousedown');
   }
 
   public hideCardLegend(): void {
     this.showLegend = false;
-    console.log('mouseup');
-  }
-
-  public revealGameBoard(): void {
-    console.log("back to normal");
   }
 }

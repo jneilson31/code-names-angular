@@ -80,9 +80,7 @@ export class CardsService {
         take(1),
         map(cards => {
           const updatedRedDeck = cards.filter(card => card.word !== wordOfCardToRemove);
-          console.log(`actualRedDeckBeforeNext `, this.redAgentDeck$$.getValue());
           this.redAgentDeck$$.next(updatedRedDeck);
-          console.log(`actualRedDeckAfterNext `, this.redAgentDeck$$.getValue());
         }),
       ).subscribe();
     }
@@ -91,9 +89,7 @@ export class CardsService {
         take(1),
         map(cards => {
           const updatedBlueDeck = cards.filter(card => card.word !== wordOfCardToRemove);
-          console.log(`actualBlueDeckBeforeNext `, this.blueAgentDeck$$.getValue());
           this.blueAgentDeck$$.next(updatedBlueDeck);
-          console.log(`actualBlueDeckAfterNext `, this.blueAgentDeck$$.getValue());
         }),
       ).subscribe();
     }
