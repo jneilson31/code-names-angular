@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { BoardComponent } from './board/board.component';
 import { CardsComponent } from './cards/cards.component';
 import { DeckComponent } from './cards/deck/deck.component';
+import { LegendModalComponent } from './shared/legend-modal/legend-modal.component';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import { DeckComponent } from './cards/deck/deck.component';
     BoardComponent,
     CardsComponent,
     DeckComponent,
+    LegendModalComponent,
   ],
   imports: [
     BrowserModule,

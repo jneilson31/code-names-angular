@@ -14,6 +14,7 @@ export interface CardVm {
   styleUrls: ['./cards.component.scss']
 })
 export class CardsComponent implements OnInit {
+  public showLegend: boolean;
   playingCards$ = this.cardsService.cardDeck$;
   whoseTurn$ = this.gameManager.whoseTurn$;
 
@@ -24,6 +25,7 @@ export class CardsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.showLegend = false;
   }
 
   // public onCardClick(event, card): void {
@@ -32,8 +34,9 @@ export class CardsComponent implements OnInit {
   // }
 
   public onCardClick(event, card): void {
-    console.log(`card: `, card);
+    this.gameManager.checkTurnAndCardValue(card);
     this.cardsService.removeCardFromDeck(card);
+    this.revealCardValue(event, card);
   }
 
   private revealCardValue(event, card) {
@@ -51,8 +54,14 @@ export class CardsComponent implements OnInit {
     }
   }
 
-  public revealCardLegend(card): void {
-    console.log("revealed card values");
+  public revealCardLegend(): void {
+    this.showLegend = true;
+    console.log('mousedown');
+  }
+
+  public hideCardLegend(): void {
+    this.showLegend = false;
+    console.log('mouseup');
   }
 
   public revealGameBoard(): void {

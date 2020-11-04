@@ -1,0 +1,12 @@
+<div class="backdrop">
+  <div class="alert-box">
+    <div class="board-border">
+      <div class="row no-gutters justify-content-around">
+        <div *ngFor="let card of playingCards$ | async" class="card-container" ngClass="{card.value ? 'red-card' : 'blue-card'}">
+          <div class="legend-card" [ngClass]="{'red-card': card.value === 'Red Agent', 'blue-card': card.value === 'Blue Agent', 'black-card':card.value === 'Assassin'}">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
