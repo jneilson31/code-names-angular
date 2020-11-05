@@ -1,18 +1,20 @@
 <div *ngIf="gameBoardVm$ | async as vm">
   <div class="container-fluid mb-4">
+    <div class="turn-indicator text-center" [ngClass]="vm.whoseTurn === 'red' ? 'red-team-turn' : 'blue-team-turn'">{{vm.whoseTurn | titlecase}} team, it's your turn!</div>
     <div class="row">
       <div class="col">
         <app-deck color='red'></app-deck>
       </div>
-      <div class="col-6 text-center">
+      <div class="col-6 text-center mb-4">
         <app-cards></app-cards>
       </div>
       <div class="col">
         <app-deck color='blue'></app-deck>
       </div>
     </div>
+    <button (mousedown)="toggleCardLegend()" class="btn btn-warning text-center">Spymaster Legend</button>
+    <app-legend-modal (mouseup)="toggleCardLegend()" *ngIf="showLegend"></app-legend-modal>
   </div>
-  <div class="turn-indicator text-center" [ngClass]="vm.whoseTurn === 'red' ? 'red-team-turn' : 'blue-team-turn'">{{vm.whoseTurn | titlecase}} team, it's your turn!</div>
   <!-- <h1 class="text-center">Time Remaining: <span>{{vm.gameTimer}}</span> seconds</h1> -->
 </div>
 

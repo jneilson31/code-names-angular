@@ -6,7 +6,6 @@ import { TimerService } from '../services/timer.service';
 
 export interface GameBoardVm {
   whoseTurn: string;
-  cards: any;
   gameTimer: number;
 
 }
@@ -17,7 +16,8 @@ export interface GameBoardVm {
   styleUrls: ['./board.component.scss']
 })
 export class BoardComponent implements OnInit {
-  gameBoardVm$: Observable<any>;
+  gameBoardVm$: Observable<GameBoardVm>;
+  showLegend: boolean;
 
   constructor(
     private readonly gameManager: GameManagerService,
@@ -39,7 +39,12 @@ export class BoardComponent implements OnInit {
         };
       })
     );
+    this.showLegend = false;
     this.gameManager.setupInitialGame();
+  }
+
+  public toggleCardLegend(): void {
+    this.showLegend = !this.showLegend;
   }
 
 }

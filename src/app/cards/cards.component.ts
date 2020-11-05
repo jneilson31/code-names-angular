@@ -24,13 +24,13 @@ export class CardsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.showLegend = false;
+    // this.showLegend = false;
   }
 
   public onCardClick(event, card): void {
     this.gameManager.checkTurnAndCardValue(card);
-    this.cardsService.removeCardFromDeck(card);
     this.revealCardValue(event, card);
+    this.cardsService.removeCardFromDeck(card);
   }
 
   private revealCardValue(event, card) {
@@ -46,13 +46,5 @@ export class CardsComponent implements OnInit {
     if (card.value === CardValues.Bystander) {
       this.renderer.addClass(event.currentTarget, 'brown-card');
     }
-  }
-
-  public revealCardLegend(): void {
-    this.showLegend = true;
-  }
-
-  public hideCardLegend(): void {
-    this.showLegend = false;
   }
 }

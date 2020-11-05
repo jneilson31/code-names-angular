@@ -1,5 +1,3 @@
-<button (mousedown)="revealCardLegend()" class="btn btn-warning mb-4">Spymaster Legend</button>
-<app-legend-modal (mouseup)="hideCardLegend()" *ngIf="showLegend"></app-legend-modal>
 <div class="row">
   <div (click)="onCardClick($event, card)" *ngFor="let card of playingCards$ | async, let i = index" class="card">
     <div class="inside-card">
