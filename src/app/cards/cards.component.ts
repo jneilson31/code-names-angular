@@ -1,4 +1,5 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
+import { map } from 'rxjs/operators';
 import { CardsService, CardValues, CodeNamesCard } from 'src/app/services/cards.service';
 import { GameManagerService } from 'src/app/services/game-manager.service';
 
@@ -24,7 +25,6 @@ export class CardsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // this.showLegend = false;
   }
 
   public onCardClick(event, card): void {

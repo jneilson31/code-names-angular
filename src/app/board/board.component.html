@@ -15,7 +15,9 @@
     <button (mousedown)="toggleCardLegend()" class="btn btn-warning text-center">Spymaster Legend</button>
     <app-legend-modal (mouseup)="toggleCardLegend()" *ngIf="showLegend"></app-legend-modal>
   </div>
+  <app-assassin-feedback *ngIf="vm.assassinCardClicked"></app-assassin-feedback>
   <!-- <h1 class="text-center">Time Remaining: <span>{{vm.gameTimer}}</span> seconds</h1> -->
 </div>
+
 
 

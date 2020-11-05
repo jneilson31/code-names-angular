@@ -6,8 +6,8 @@ import { TimerService } from '../services/timer.service';
 
 export interface GameBoardVm {
   whoseTurn: string;
+  assassinCardClicked: boolean;
   gameTimer: number;
-
 }
 
 @Component({
@@ -18,6 +18,7 @@ export interface GameBoardVm {
 export class BoardComponent implements OnInit {
   gameBoardVm$: Observable<GameBoardVm>;
   showLegend: boolean;
+  assassinCardClicked: boolean;
 
   constructor(
     private readonly gameManager: GameManagerService,
@@ -27,14 +28,17 @@ export class BoardComponent implements OnInit {
   ngOnInit(): void {
     this.gameBoardVm$ = combineLatest([
       this.gameManager.whoseTurn$,
+      this.gameManager.assassinCardClicked$,
       this.timerService.timer$,
     ]).pipe(
       map(([
         colorOfFirstTurn,
+        assassinCardClicked,
         gameTimer
       ]) => {
         return {
           whoseTurn: colorOfFirstTurn,
+          assassinCardClicked: assassinCardClicked,
           gameTimer
         };
       })

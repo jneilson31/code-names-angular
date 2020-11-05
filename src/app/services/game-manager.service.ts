@@ -12,7 +12,9 @@ export enum whoseTurn {
   providedIn: 'root'
 })
 export class GameManagerService {
-  private whoseTurnSubject: BehaviorSubject<string> = new BehaviorSubject(null);
+  private whoseTurnSubject: BehaviorSubject<whoseTurn> = new BehaviorSubject(null);
+  private assassinCardClicked$$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public assassinCardClicked$: Observable<boolean> = this.assassinCardClicked$$.asObservable();
   public whoseTurn$: Observable<string> = this.whoseTurnSubject.asObservable();
 
   constructor(readonly cardsService: CardsService, readonly timerService: TimerService) { }
@@ -36,28 +38,35 @@ export class GameManagerService {
   }
 
   public checkTurnAndCardValue(card): void {
-    if (this.whoseTurnSubject.value === 'red' && card.value === CardValues.RedAgent) {
+    if (this.whoseTurnSubject.value === whoseTurn.RedAgent && card.value === CardValues.RedAgent) {
       console.log('You got it right');
     }
-    if (this.whoseTurnSubject.value === 'blue' && card.value === CardValues.BlueAgent) {
+    if (this.whoseTurnSubject.value === whoseTurn.BlueAgent && card.value === CardValues.BlueAgent) {
       console.log('You got it right');
     }
-    if (this.whoseTurnSubject.value === 'red' && card.value === CardValues.BlueAgent) {
+    if (this.whoseTurnSubject.value === whoseTurn.RedAgent && card.value === CardValues.BlueAgent) {
       console.log(`That was blue's card, turn over!`);
-      this.whoseTurnSubject.next('blue');
+      this.whoseTurnSubject.next(whoseTurn.BlueAgent);
     }
-    if (this.whoseTurnSubject.value === 'blue' && card.value === CardValues.RedAgent) {
+    if (this.whoseTurnSubject.value === whoseTurn.BlueAgent && card.value === CardValues.RedAgent) {
       console.log(`That was red's card!`);
-      this.whoseTurnSubject.next('red');
+      this.whoseTurnSubject.next(whoseTurn.RedAgent);
     }
     if (card.value === CardValues.Bystander) {
       console.log('That card was an innocent bystander');
-      this.whoseTurnSubject.getValue() === 'blue' ? this.whoseTurnSubject.next('red') : this.whoseTurnSubject.next('blue');
+      this.whoseTurnSubject.getValue() === whoseTurn.BlueAgent ? this.whoseTurnSubject.next(whoseTurn.RedAgent) : this.whoseTurnSubject.next(whoseTurn.BlueAgent);
     }
     if (card.value === CardValues.Assassin) {
+      this.updateAssassinSubject();
+      // this.assassinCardClicked$$.next(true);
       console.log('You have been assassinated. Game Over');
-      alert('You have been assassinated. Game Over');
+      // alert('You have been assassinated. Game Over');
     }
+  }
+
+  private updateAssassinSubject(): void {
+    this.assassinCardClicked$$.next(true)
+    setTimeout(() => this.assassinCardClicked$$.next(false), 20000);
   }
 
   // private startCountdown(seconds): void {
