@@ -8,17 +8,11 @@ export class AlertifyService {
 
   constructor() { }
 
-  customSuccess(message: string, duration?: number) {
-    alertify.success(message).setting({
-      'transition': 'pulse',
-      'basic': true,
-    }).show()
-  }
-
-  customAssassin(winningTeam, duration?: number) {
+  customAssassin(winningTeam) {
     alertify.alert().setting({
       'title': `I'm sorry, you've uncovered the assassin! ${winningTeam} team wins!`,
       'transition': 'pulse',
+      'label': 'Game Over',
       'startMaximized' : true,
       'message': `<div class="backdrop">
       <div class="embed-responsive embed-responsive-16by9">
@@ -26,7 +20,7 @@ export class AlertifyService {
       </div>
     </div>
     `
-    }, duration).show()
+    }).show()
   }
 
 

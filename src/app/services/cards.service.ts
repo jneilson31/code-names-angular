@@ -11,6 +11,7 @@ export enum CardValues {
 export interface CodeNamesCard {
   word: string;
   value: CardValues;
+  cardClicked: boolean;
 }
 
 @Injectable({
@@ -98,7 +99,8 @@ export class CardsService {
   private assignCardValues(words: string[], agentColor: CardValues): CodeNamesCard[] {
     return words.map(word => ({
       word,
-      value: agentColor
+      value: agentColor,
+      cardClicked: false
     }));
   }
 

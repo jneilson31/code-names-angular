@@ -16,7 +16,6 @@ export interface CardVm {
 })
 export class CardsComponent implements OnInit {
   public showLegend: boolean;
-  public cardWasClicked: true;
   playingCards$ = this.cardsService.cardDeck$;
   whoseTurn$ = this.gameManager.whoseTurn$;
 
@@ -30,9 +29,14 @@ export class CardsComponent implements OnInit {
   }
 
   public onCardClick(event, card): void {
-    this.gameManager.checkTurnAndCardValue(card);
-    this.revealCardValue(event, card);
-    this.cardsService.removeCardFromDeck(card);
+    if (!card.cardClicked) {
+      card.cardClicked = true;
+      this.gameManager.checkTurnAndCardValue(card);
+      this.revealCardValue(event, card);
+      this.cardsService.removeCardFromDeck(card);
+    }
+    return;
+
   }
 
   private revealCardValue(event, card) {

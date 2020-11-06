@@ -66,8 +66,8 @@ export class GameManagerService {
     }
     if (card.value === CardValues.Assassin) {
       this.whoseTurnSubject.getValue() === whoseTurn.RedAgent
-      ? this.alertifyService.customAssassin(whoseTurn.BlueAgent, 1)
-      : this.alertifyService.customAssassin(whoseTurn.RedAgent, 1);
+      ? this.alertifyService.customAssassin(whoseTurn.BlueAgent)
+      : this.alertifyService.customAssassin(whoseTurn.RedAgent);
     }
   }
 
