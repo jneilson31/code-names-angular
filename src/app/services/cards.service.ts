@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { map, shareReplay, take } from 'rxjs/operators';
+import { AlertifyService } from './alertify.service';
+import { whoseTurn } from './game-manager.service';
 
 export enum CardValues {
   RedAgent = 'Red Agent',
@@ -42,6 +44,8 @@ export class CardsService {
     'oil', 'journey', 'life', 'pirate',
     'queen', 'time'];
 
+    constructor(private readonly alertifyService: AlertifyService) {}
+
   public cardDeck$: Observable<CodeNamesCard[]> = combineLatest([
     this.numberOfCardsInPlay$$,
     this.numberOfRedAgentCards$$,
@@ -80,6 +84,9 @@ export class CardsService {
       this.redAgentDeck$$.pipe(
         take(1),
         map(cards => {
+          if (cards.length <= 1) {
+            this.alertifyService.gameOverAlert('Red');
+          }
           const updatedRedDeck = cards.filter(card => card.word !== wordOfCardToRemove);
           this.redAgentDeck$$.next(updatedRedDeck);
         }),
@@ -89,6 +96,9 @@ export class CardsService {
       this.blueAgentDeck$$.pipe(
         take(1),
         map(cards => {
+          if (cards.length <= 1) {
+            this.alertifyService.gameOverAlert('Blue');
+          }
           const updatedBlueDeck = cards.filter(card => card.word !== wordOfCardToRemove);
           this.blueAgentDeck$$.next(updatedBlueDeck);
         }),

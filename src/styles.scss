@@ -3,3 +3,14 @@ body {
   max-height: 100vh;
 }
 
+
+
+.winner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  .winning-text {
+    font-size: 128px;
+  }
+}

@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
+import { whoseTurn } from './game-manager.service';
 declare let alertify: any;
 
 @Injectable({
   providedIn: 'root'
 })
 export class AlertifyService {
-
-  constructor() { }
 
   customAssassin(winningTeam) {
     alertify.alert().setting({
@@ -41,5 +40,18 @@ export class AlertifyService {
 
   message(message: string, duration?: number) {
     alertify.message(message, duration);
+  }
+
+  gameOverAlert(winningTeam: string) {
+    alertify.alert().setting({
+      // 'title': `${winningTeam} agents win!`,
+      'basic': true,
+      'transition': 'pulse',
+      'label': 'Game Over',
+      'startMaximized' : true,
+      'message': `<div class="winner-container">
+      <h1 class="winning-text">${winningTeam} Agents Win!</h1>
+    </div>`
+    }).show()
   }
 }
