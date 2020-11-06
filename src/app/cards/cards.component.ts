@@ -6,6 +6,7 @@ import { GameManagerService } from 'src/app/services/game-manager.service';
 export interface CardVm {
   cards: CodeNamesCard[];
   whoseTurn: string;
+  cardClicked: boolean;
 }
 
 @Component({
@@ -15,6 +16,7 @@ export interface CardVm {
 })
 export class CardsComponent implements OnInit {
   public showLegend: boolean;
+  public cardWasClicked: true;
   playingCards$ = this.cardsService.cardDeck$;
   whoseTurn$ = this.gameManager.whoseTurn$;
 

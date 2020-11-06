@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { AlertifyService } from '../services/alertify.service';
 import { GameManagerService } from '../services/game-manager.service';
 import { TimerService } from '../services/timer.service';
 
@@ -22,7 +23,8 @@ export class BoardComponent implements OnInit {
 
   constructor(
     private readonly gameManager: GameManagerService,
-    private readonly timerService: TimerService
+    private readonly timerService: TimerService,
+    private readonly alertifyService: AlertifyService
     ) { }
 
   ngOnInit(): void {
@@ -50,5 +52,4 @@ export class BoardComponent implements OnInit {
   public toggleCardLegend(): void {
     this.showLegend = !this.showLegend;
   }
-
 }

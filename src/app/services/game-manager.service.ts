@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { AlertifyService } from './alertify.service';
 import { CardsService, CardValues } from './cards.service';
 import { TimerService } from './timer.service';
 
 export enum whoseTurn {
-  RedAgent = 'red',
-  BlueAgent = 'blue',
+  RedAgent = 'Red',
+  BlueAgent = 'Blue',
 }
 
 @Injectable({
@@ -17,7 +18,10 @@ export class GameManagerService {
   public assassinCardClicked$: Observable<boolean> = this.assassinCardClicked$$.asObservable();
   public whoseTurn$: Observable<string> = this.whoseTurnSubject.asObservable();
 
-  constructor(readonly cardsService: CardsService, readonly timerService: TimerService) { }
+  constructor(private readonly cardsService: CardsService,
+              private readonly timerService: TimerService,
+              private readonly alertifyService: AlertifyService
+              ) { }
 
   public setupInitialGame(): void {
     this.assignTeamThatGoesFirst();
@@ -39,35 +43,38 @@ export class GameManagerService {
 
   public checkTurnAndCardValue(card): void {
     if (this.whoseTurnSubject.value === whoseTurn.RedAgent && card.value === CardValues.RedAgent) {
-      console.log('You got it right');
+      this.alertifyService.success(`Awesome job ${whoseTurn.RedAgent.toLowerCase()}! You found one of your missing agents!`, 3);
     }
     if (this.whoseTurnSubject.value === whoseTurn.BlueAgent && card.value === CardValues.BlueAgent) {
-      console.log('You got it right');
+      this.alertifyService.success(`Awesome job ${whoseTurn.BlueAgent.toLowerCase()}! You found one of your missing agents!`, 3);
     }
     if (this.whoseTurnSubject.value === whoseTurn.RedAgent && card.value === CardValues.BlueAgent) {
-      console.log(`That was blue's card, turn over!`);
       this.whoseTurnSubject.next(whoseTurn.BlueAgent);
+      this.alertifyService.error(`You were mistaken, you've uncovered a ${whoseTurn.BlueAgent.toLowerCase()} agent!`, 3);
+
     }
     if (this.whoseTurnSubject.value === whoseTurn.BlueAgent && card.value === CardValues.RedAgent) {
-      console.log(`That was red's card!`);
       this.whoseTurnSubject.next(whoseTurn.RedAgent);
+      this.alertifyService.error(`You were mistaken, you've uncovered a ${whoseTurn.RedAgent.toLowerCase()} agent!`, 3);
+
     }
     if (card.value === CardValues.Bystander) {
-      console.log('That card was an innocent bystander');
-      this.whoseTurnSubject.getValue() === whoseTurn.BlueAgent ? this.whoseTurnSubject.next(whoseTurn.RedAgent) : this.whoseTurnSubject.next(whoseTurn.BlueAgent);
+      this.alertifyService.warning("You really thought this civilian was an undercover agent? Were you distracted?", 5);
+      this.whoseTurnSubject.getValue() === whoseTurn.RedAgent
+      ? this.whoseTurnSubject.next(whoseTurn.BlueAgent)
+      : this.whoseTurnSubject.next(whoseTurn.RedAgent);
     }
     if (card.value === CardValues.Assassin) {
-      this.updateAssassinSubject();
-      // this.assassinCardClicked$$.next(true);
-      console.log('You have been assassinated. Game Over');
-      // alert('You have been assassinated. Game Over');
+      this.whoseTurnSubject.getValue() === whoseTurn.RedAgent
+      ? this.alertifyService.customAssassin(whoseTurn.BlueAgent, 1)
+      : this.alertifyService.customAssassin(whoseTurn.RedAgent, 1);
     }
   }
 
-  private updateAssassinSubject(): void {
-    this.assassinCardClicked$$.next(true)
-    setTimeout(() => this.assassinCardClicked$$.next(false), 20000);
-  }
+  // private updateAssassinSubject(): void {
+  //   this.assassinCardClicked$$.next(true)
+  //   setTimeout(() => this.assassinCardClicked$$.next(false), 20000);
+  // }
 
   // private startCountdown(seconds): void {
   //   let counter = seconds;
